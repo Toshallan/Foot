@@ -46,10 +46,35 @@
         }
         #controls {
             margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .direction {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 5px;
         }
         button {
             padding: 10px;
             margin: 5px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:active {
+            background-color: #0056b3;
+        }
+        .direction-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .horizontal {
+            display: flex;
+            justify-content: center;
         }
     </style>
 </head>
@@ -60,10 +85,18 @@
         <div class="player" id="player"></div>
     </div>
     <div id="controls">
-        <button id="up">↑</button>
-        <button id="down">↓</button>
-        <button id="left">←</button>
-        <button id="right">→</button>
+        <div class="direction-buttons">
+            <div class="direction">
+                <button id="up">↑</button>
+            </div>
+            <div class="horizontal">
+                <button id="left">←</button>
+                <button id="right">→</button>
+            </div>
+            <div class="direction">
+                <button id="down">↓</button>
+            </div>
+        </div>
         <button id="placeBomb">Placer Bombe</button>
         <button id="changeMap">Changer de Map</button>
     </div>
