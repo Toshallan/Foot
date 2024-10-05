@@ -12,6 +12,7 @@
             height: 100vh;
             margin: 0;
             background-color: #e0e0e0;
+            touch-action: none; /* Désactive les actions tactiles par défaut */
         }
         #gameArea {
             position: relative;
@@ -112,16 +113,13 @@
             }, 50);
         }
 
-        // Événement de saut
-        document.addEventListener('keydown', (event) => {
-            if (event.code === 'Space') {
-                jump();
-            }
-        });
+        // Événement de saut sur clic ou toucher
+        document.addEventListener('click', jump);
+        document.addEventListener('touchstart', jump); // Pour les appareils tactiles
 
         // Créer un obstacle toutes les 2 secondes
         setInterval(createObstacle, 2000);
     </script>
 </body>
 </html>
-            
+        
