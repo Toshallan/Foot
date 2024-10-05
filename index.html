@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu de Course</title>
+    <title>Jeu de Course et Saut</title>
     <style>
         body {
             display: flex;
@@ -27,7 +27,7 @@
             left: 50px;
             width: 40px;
             height: 40px;
-            background-color: #28a745;
+            background-color: #28a745; /* Couleur du personnage */
             transition: bottom 0.3s;
         }
         .obstacle {
@@ -35,27 +35,37 @@
             bottom: 20px;
             width: 40px;
             height: 40px;
-            background-color: #dc3545;
+            background-color: #dc3545; /* Couleur de l'obstacle */
             animation: move 2s linear infinite;
         }
         @keyframes move {
             0% { right: -40px; }
             100% { right: 400px; }
         }
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
     <div id="gameArea">
+        <div id="score">Score: 0</div>
         <div id="player"></div>
     </div>
     <script>
         const player = document.getElementById('player');
         const gameArea = document.getElementById('gameArea');
+        const scoreDisplay = document.getElementById('score');
         let isJumping = false;
+        let score = 0;
+        let gameOver = false;
 
         // Fonction pour faire sauter le joueur
         function jump() {
-            if (isJumping) return;
+            if (isJumping || gameOver) return;
             isJumping = true;
             player.style.bottom = '150px';
             setTimeout(() => {
@@ -73,6 +83,10 @@
             // Suppression de l'obstacle après 2 secondes
             setTimeout(() => {
                 obstacle.remove();
+                if (!gameOver) {
+                    score++;
+                    scoreDisplay.textContent = 'Score: ' + score;
+                }
             }, 2000);
 
             // Vérifier les collisions
@@ -86,9 +100,14 @@
                     playerRect.y < obstacleRect.y + obstacleRect.height &&
                     playerRect.y + playerRect.height > obstacleRect.y
                 ) {
-                    alert('Game Over!');
+                    alert('Game Over! Ton score est ' + score);
+                    gameOver = true;
                     clearInterval(checkCollision);
                     obstacle.remove();
+                    // Réinitialiser le jeu après 3 secondes
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
                 }
             }, 50);
         }
@@ -105,9 +124,4 @@
     </script>
 </body>
 </html>
-            
-            
-            
-    
-    
             
