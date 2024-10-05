@@ -1,227 +1,81 @@
-
-     <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu Inspiré de Bomberman</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #e0e0e0;
-            margin: 0;
-        }
-        #gameArea {
-            position: relative;
-            width: 400px;
-            height: 400px;
-            border: 2px solid #333;
-            background-color: #fff;
-            overflow: hidden;
-        }
-        /* Style pour le personnage */
-        .player {
-            position: absolute;
-            width: 40px;
-            height: 60px; /* Augmenté pour le corps */
-            background-color: #28a745; /* Couleur du joueur */
-            border-radius: 5px;
-        }
-        .arm {
-            position: absolute;
-            width: 10px;
-            height: 30px;
-            background-color: #28a745;
-            border-radius: 5px;
-        }
-        .foot {
-            position: absolute;
-            width: 15px;
-            height: 10px;
-            background-color: #28a745;
-            border-radius: 5px;
-        }
-        /* Position des bras et pieds */
-        .left-arm {
-            left: -10px;
-            top: 10px;
-        }
-        .right-arm {
-            right: -10px;
-            top: 10px;
-        }
-        .left-foot {
-            left: 5px;
-            bottom: -10px;
-        }
-        .right-foot {
-            right: 5px;
-            bottom: -10px;
-        }
-        .enemy {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background-color: #dc3545; /* Couleur des ennemis */
-        }
-        .bomb {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background-color: yellow; /* Couleur de la bombe */
-        }
-        .map {
-            display: none;
-        }
-        .map.active {
-            display: block;
-        }
-        #controls {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .direction {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 5px;
-        }
-        button {
-            padding: 10px;
-            margin: 5px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:active {
-            background-color: #0056b3;
-        }
-        .direction-buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .horizontal {
-            display: flex;
-            justify-content: center;
-        }
-    </style>
+    <title>FT Live Scores - Football en Direct</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="gameArea">
-        <div class="map active" id="map1"></div>
-        <div class="map" id="map2"></div>
-        <div class="player" id="player">
-            <div class="arm left-arm"></div>
-            <div class="arm right-arm"></div>
-            <div class="foot left-foot"></div>
-            <div class="foot right-foot"></div>
-        </div>
+
+<header>
+    <div class="container">
+        <h1>FT Live Scores</h1>
+        <nav>
+            <a href="#scores">Scores en Direct</a>
+            <a href="#teams">Équipes</a>
+            <a href="#players">Joueurs</a>
+            <a href="#about">À Propos</a>
+        </nav>
     </div>
-    <div id="controls">
-        <div class="direction-buttons">
-            <div class="direction">
-                <button id="up">↑</button>
-            </div>
-            <div class="horizontal">
-                <button id="left">←</button>
-                <button id="right">→</button>
-            </div>
-            <div class="direction">
-                <button id="down">↓</button>
-            </div>
-        </div>
-        <button id="placeBomb">Placer Bombe</button>
-        <button id="changeMap">Changer de Map</button>
-    </div>
-    <script>
-        const player = document.getElementById('player');
-        const maps = document.querySelectorAll('.map');
-        const map1 = document.getElementById('map1');
-        const map2 = document.getElementById('map2');
-        const bombRadius = 40;
-        let currentMap = 0;
-        let enemies = [];
-        let bombTimeouts = [];
-        
-        // Initialiser la position du joueur
-        player.style.left = '50px';
-        player.style.top = '50px';
+</header>
 
-        // Gérer le déplacement du joueur
-        function movePlayer(direction) {
-            const playerRect = player.getBoundingClientRect();
-            switch (direction) {
-                case 'up':
-                    if (playerRect.top > 0) {
-                        player.style.top = playerRect.top - 40 + 'px';
-                    }
-                    break;
-                case 'down':
-                    if (playerRect.bottom < gameArea.clientHeight) {
-                        player.style.top = playerRect.top + 40 + 'px';
-                    }
-                    break;
-                case 'left':
-                    if (playerRect.left > 0) {
-                        player.style.left = playerRect.left - 40 + 'px';
-                    }
-                    break;
-                case 'right':
-                    if (playerRect.right < gameArea.clientWidth) {
-                        player.style.left = playerRect.left + 40 + 'px';
-                    }
-                    break;
-            }
-        }
+<div class="hero">
+    <h2>Suivez tous les matchs en direct !</h2>
+    <button onclick="location.href='#scores'">Voir les Scores</button>
+</div>
 
-        // Placer une bombe
-        function placeBomb() {
-            const bomb = document.createElement('div');
-            bomb.classList.add('bomb');
-            bomb.style.left = player.style.left;
-            bomb.style.top = player.style.top;
-            gameArea.appendChild(bomb);
+<div class="container">
+    <section id="scores" class="scores">
+        <h2>Scores en Direct</h2>
+        <ul>
+            <li>Match 1: Équipe A 2 - 1 Équipe B</li>
+            <li>Match 2: Équipe C 0 - 3 Équipe D</li>
+            <li>Match 3: Équipe E 1 - 1 Équipe F</li>
+        </ul>
+    </section>
 
-            // Explosion après 2 secondes
-            const bombTimeout = setTimeout(() => {
-                bomb.remove();
-                explodeBomb(bomb);
-            }, 2000);
-            bombTimeouts.push(bombTimeout);
-        }
+    <section id="teams" class="teams">
+        <h2>Équipes</h2>
+        <ul>
+            <li>Équipe A</li>
+            <li>Équipe B</li>
+            <li>Équipe C</li>
+            <li>Équipe D</li>
+            <li>Équipe E</li>
+            <li>Équipe F</li>
+        </ul>
+    </section>
 
-        // Explosion de la bombe
-        function explodeBomb(bomb) {
-            const bombRect = bomb.getBoundingClientRect();
-            const explosionArea = [
-                { x: bombRect.left, y: bombRect.top },
-                { x: bombRect.left + bombRadius, y: bombRect.top },
-                { x: bombRect.left - bombRadius, y: bombRect.top },
-                { x: bombRect.left, y: bombRect.top + bombRadius },
-                { x: bombRect.left, y: bombRect.top - bombRadius }
-            ];
-            
-            explosionArea.forEach(point => {
-                enemies.forEach(enemy => {
-                    const enemyRect = enemy.getBoundingClientRect();
-                    if (
-                        point.x < enemyRect.right && 
-                        point.x + bombRadius > enemyRect.left && 
-                        point.y < enemyRect.bottom && 
-                        point.y + bombRadius > enemyRect.top
-                    ) {
-                        enemy.remove(); // Supprimer l'ennemi touché
-                    }
-                });
-            });
-        }
+    <section id="players" class="players">
+        <h2>Joueurs</h2>
+        <ul>
+            <li>Joueur 1 - Équipe A</li>
+            <li>Joueur 2 - Équipe B</li>
+            <li>Joueur 3 - Équipe C</li>
+            <li>Joueur 4 - Équipe D</li>
+            <li>Joueur 5 - Équipe E</li>
+            <li>Joueur 6 - Équipe F</li>
+        </ul>
+    </section>
 
-        // Ajouter un ennemi
-        function addEnemy() {
-            const enemy = document.createElement('div   
+    <section id="about" class="about">
+        <h2>À Propos de FT Live Scores</h2>
+        <p>FT Live Scores est votre source incontournable pour les scores en direct et les informations sur le football. Restez à jour avec les derniers matchs, équipes et joueurs.</p>
+    </section>
+
+    <section class="ads">
+        <h2>Publicités</h2>
+        <div class="ad">Achetez vos billets ici !</div>
+        <div class="ad">Promotion sur les maillots de votre équipe favorite !</div>
+        <div class="ad">Pari en direct sur les matchs !</div>
+    </section>
+</div>
+
+<footer>
+    <p>&copy; 2024 FT Live Scores. Tous droits réservés.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
