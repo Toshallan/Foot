@@ -4,6 +4,150 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FTlivescores</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        main {
+            padding: 20px;
+        }
+        section {
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #28a745;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        img {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>FTlivescores</h1>
+        <nav>
+            <ul>
+                <li><a href="#scores">Scores en direct</a></li>
+                <li><a href="#stats">Statistiques</a></li>
+                <li><a href="#news">Actualités</a></li>
+                <li><a href="#upcoming">Prochains matchs</a></li>
+                <li><a href="#ads">Publicités</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="scores">
+            <h2>Scores en direct</h2>
+            <table>
+                <tr>
+                    <th>Équipe 1</th>
+                    <th>Score</th>
+                    <th>Équipe 2</th>
+                </tr>
+                <tr>
+                    <td>Équipe A</td>
+                    <td>1</td>
+                    <td>Équipe B</td>
+                </tr>
+                <tr>
+                    <td>Équipe C</td>
+                    <td>2</td>
+                    <td>Équipe D</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="upcoming">
+            <h2>Prochains matchs</h2>
+            <ul>
+                <li>Équipe A vs Équipe C - Date : 15 octobre 2024</li>
+                <li>Équipe B vs Équipe D - Date : 16 octobre 2024</li>
+            </ul>
+        </section>
+
+        <section id="stats">
+            <h2>Statistiques des équipes</h2>
+            <p>Nombre de victoires, défaites, etc.</p>
+            <img src="https://images.unsplash.com/photo-1581506923543-4404a6db5e26?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3N3wwfDF8c2VhcmNofDJ8fGZvb3RiYWxsJTJDJTIwY29tcGV0aXRpb258ZW58MHx8fHwxNjA5NjIwMTE5&ixlib=rb-1.2.1&q=80&w=1080" alt="Joueurs de football">
+        </section>
+
+        <section id="news">
+            <h2>Actualités</h2>
+            <p>Dernières nouvelles du football.</p>
+            <img src="https://images.unsplash.com/photo-1596621819724-91a3c906005b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3N3wwfDF8c2VhcmNofDIwfHxmb290YmFsbCUyMG1hdGNoJTIwYXJ0aWNsZXxlbnwwfHx8fDE2MDk2MjAyNzg&ixlib=rb-1.2.1&q=80&w=1080" alt="Match de football">
+        </section>
+
+        <section id="ads">
+            <h2>Publicités</h2>
+            <div class="ad">
+                <h3>Achetez votre maillot de l'équipe !</h3>
+                <p>Découvrez notre collection de maillots de football. Livraison gratuite pour toute commande !</p>
+                <img src="https://images.unsplash.com/photo-1558223272-d5c6a97388e4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3N3wwfDF8c2VhcmNofDV8fGZvb3RiYWxsJTIwY2hhbGxlbmdlJTIwbWFpbG90fGVufDB8fHx8MTYwOTYyMDMyMw&ixlib=rb-1.2.1&q=80&w=1080" alt="Maillot de football">
+            </div>
+            <div class="ad">
+                <h3>Événement spécial de football</h3>
+                <p>Participez à notre événement exclusif et gagnez des prix incroyables ! Inscrivez-vous dès maintenant.</p>
+                <img src="https://images.unsplash.com/photo-1605421611669-0f8d20be5a9e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3N3wwfDF8c2VhcmNofDR8fGZvb3RiYWxsJTIwZXZlbnR8ZW58MHx8fHwxNjA5NjIwNDY1&ixlib=rb-1.2.1&q=80&w=1080" alt="Événement de football">
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Contactez-nous</h2>
+            <form>
+                <label for="name">Nom :</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email :</label>
+                <input type="email" id="email" name="email" required>
+                <button type="submit">Envoyer</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 FTlivescores. Tous droits réservés.</p>
+    </footer>
+</body>
+</html><!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTlivescores</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
