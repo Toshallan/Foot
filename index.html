@@ -3,123 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu de Course et Saut</title>
+    <title>Jeu Inspiré de Bomberman</title>
     <style>
         body {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
-            margin: 0;
             background-color: #e0e0e0;
-            touch-action: none; /* Désactive les actions tactiles par défaut */
+            margin: 0;
         }
         #gameArea {
             position: relative;
             width: 400px;
             height: 400px;
-            overflow: hidden;
-            background-color: white;
             border: 2px solid #333;
+            background-color: #fff;
+            overflow: hidden;
         }
-        #player {
+        .player {
             position: absolute;
-            bottom: 20px;
-            left: 50px;
             width: 40px;
             height: 40px;
-            background-color: #28a745; /* Couleur du personnage */
-            transition: bottom 0.3s;
+            background-color: #28a745; /* Couleur du joueur */
         }
-        .obstacle {
+        .enemy {
             position: absolute;
-            bottom: 20px;
             width: 40px;
             height: 40px;
-            background-color: #dc3545; /* Couleur de l'obstacle */
-            animation: move 2s linear infinite;
+            background-color: #dc3545; /* Couleur des ennemis */
         }
-        @keyframes move {
-            0% { right: -40px; }
-            100% { right: 400px; }
-        }
-        #score {
+        .bomb {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: yellow; /* Couleur de la bombe */
+        }
+        .map {
+            display: none;
+        }
+        .map.active {
+            display: block;
+        }
+        #controls {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px;
+            margin: 5px;
         }
     </style>
 </head>
 <body>
     <div id="gameArea">
-        <div id="score">Score: 0</div>
-        <div id="player"></div>
+        <div class="map active" id="map1"></div>
+        <div class="map" id="map2"></div>
+        <div class="player" id="player"></div>
+    </div>
+    <div id="controls">
+        <button id="up">↑</button>
+        <button id="down">↓</button>
+        <button id="left">←</button>
+        <button id="right">→</button>
+        <button id="placeBomb">Placer Bombe</button>
+        <button id="changeMap">Changer de Map</button>
     </div>
     <script>
         const player = document.getElementById('player');
-        const gameArea = document.getElementById('gameArea');
-        const scoreDisplay = document.getElementById('score');
-        let isJumping = false;
-        let score = 0;
-        let gameOver = false;
+        const maps = document.querySelectorAll('.map');
+        const map1 = document.getElementById('map1');
+        const map2 = document.getElementById('map2');
+        const bombRadius = 40;
+        let currentMap = 0;
+        let enemies = [];
+        let bombTimeouts = [];
+        
+        // Initialiser la position du joueur
+        player.style.left = '50px';
+        player.style.top = '50px';
 
-        // Fonction pour faire sauter le joueur
-        function jump() {
-            if (isJumping || gameOver) return;
-            isJumping = true;
-            player.style.bottom = '150px';
-            setTimeout(() => {
-                player.style.bottom = '20px';
-                isJumping = false;
-            }, 300);
+        // Gérer le déplacement du joueur
+        function movePlayer(direction) {
+            const playerRect = player.getBoundingClientRect();
+            switch (direction) {
+                case 'up':
+                    if (playerRect.top > 0) {
+                        player.style.top = playerRect.top - 40 + 'px';
+                    }
+                    break;
+                case 'down':
+                    if (playerRect.bottom < gameArea.clientHeight) {
+                        player.style.top = playerRect.top + 40 + 'px';
+                    }
+                    break;
+                case 'left':
+                    if (playerRect.left > 0) {
+                        player.style.left = playerRect.left - 40 + 'px';
+                    }
+                    break;
+                case 'right':
+                    if (playerRect.right < gameArea.clientWidth) {
+                        player.style.left = playerRect.left + 40 + 'px';
+                    }
+                    break;
+            }
         }
 
-        // Fonction pour créer des obstacles
-        function createObstacle() {
-            const obstacle = document.createElement('div');
-            obstacle.classList.add('obstacle');
-            gameArea.appendChild(obstacle);
+        // Placer une bombe
+        function placeBomb() {
+            const bomb = document.createElement('div');
+            bomb.classList.add('bomb');
+            bomb.style.left = player.style.left;
+            bomb.style.top = player.style.top;
+            gameArea.appendChild(bomb);
 
-            // Suppression de l'obstacle après 2 secondes
-            setTimeout(() => {
-                obstacle.remove();
-                if (!gameOver) {
-                    score++;
-                    scoreDisplay.textContent = 'Score: ' + score;
-                }
+            // Explosion après 2 secondes
+            const bombTimeout = setTimeout(() => {
+                bomb.remove();
+                explodeBomb(bomb);
             }, 2000);
-
-            // Vérifier les collisions
-            const checkCollision = setInterval(() => {
-                const playerRect = player.getBoundingClientRect();
-                const obstacleRect = obstacle.getBoundingClientRect();
-
-                if (
-                    playerRect.x < obstacleRect.x + obstacleRect.width &&
-                    playerRect.x + playerRect.width > obstacleRect.x &&
-                    playerRect.y < obstacleRect.y + obstacleRect.height &&
-                    playerRect.y + playerRect.height > obstacleRect.y
-                ) {
-                    alert('Game Over! Ton score est ' + score);
-                    gameOver = true;
-                    clearInterval(checkCollision);
-                    obstacle.remove();
-                    // Réinitialiser le jeu après 3 secondes
-                    setTimeout(() => {
-                        location.reload();
-                    }, 3000);
-                }
-            }, 50);
+            bombTimeouts.push(bombTimeout);
         }
 
-        // Événement de saut sur clic ou toucher
-        document.addEventListener('click', jump);
-        document.addEventListener('touchstart', jump); // Pour les appareils tactiles
+        // Explosion de la bombe
+        function explodeBomb(bomb) {
+            const bombRect = bomb.getBoundingClientRect();
+            const explosionArea = [
+                { x: bombRect.left, y: bombRect.top },
+                { x: bombRect.left + bombRadius, y: bombRect.top },
+                { x: bombRect.left - bombRadius, y: bombRect.top },
+                { x: bombRect.left, y: bombRect.top + bombRadius },
+                { x: bombRect.left, y: bombRect.top - bombRadius }
+            ];
+            
+            explosionArea.forEach(point => {
+                enemies.forEach(enemy => {
+                    const enemyRect = enemy.getBoundingClientRect();
+                    if (
+                        point.x < enemyRect.right && 
+                        point.x + bombRadius > enemyRect.left && 
+                        point.y < enemyRect.bottom && 
+                        point.y + bombRadius > enemyRect.top
+                    ) {
+                        enemy.remove(); // Supprimer l'ennemi touché
+                    }
+                });
+            });
+        }
 
-        // Créer un obstacle toutes les 2 secondes
-        setInterval(createObstacle, 2000);
+        // Ajouter un ennemi
+        function addEnemy() {
+            const enemy = document.createElement('div');
+            enemy.classList.add('enemy');
+            enemy.style.left = Math.floor(Math.random() * (gameArea.clientWidth - 40)) + 'px';
+            enemy.style.top = Math.floor(Math.random() * (gameArea.clientHeight - 40)) + 'px';
+            gameArea.appendChild(enemy);
+            enemies.push(enemy);
+        }
+
+        // Changer de carte
+        function changeMap() {
+            maps[currentMap].classList.remove('active');
+            currentMap = (currentMap + 1) % maps.length;
+            maps[currentMap].classList.add('active');
+            resetGame();
+        }
+
+        // Réinitialiser le jeu
+        function resetGame() {
+            enemies.forEach(enemy => enemy.remove());
+            enemies = [];
+            for (let i = 0; i < 3; i++) { // Ajouter 3 ennemis par carte
+                addEnemy();
+            }
+        }
+
+        // Événements des boutons
+        document.getElementById('up').addEventListener('click', () => movePlayer('up'));
+        document.getElementById('down').addEventListener('click', () => movePlayer('down'));
+        document.getElementById('left').addEventListener('click', () => movePlayer('left'));
+        document.getElementById('right').addEventListener('click', () => movePlayer('right'));
+        document.getElementById('placeBomb').addEventListener('click', placeBomb);
+        document.getElementById('changeMap').addEventListener('click', changeMap);
+
+        // Initialiser les ennemis
+        for (let i = 0; i < 3; i++) {
+            addEnemy();
+        }
     </script>
 </body>
 </html>
-        
